@@ -1,0 +1,40 @@
+name: Island100 Android APK
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    name: Build Android APK
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Unity Project
+        uses: game-ci/unity-builder@v4
+
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+        with:
+          targetPlatform: Android
+          buildMethod: Build.BuildAndroid
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: Island100-APK
+          path: build/Island100.apk
